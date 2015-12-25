@@ -1,14 +1,12 @@
 package View;
 
-public class snakePart {
+public class SnakePart {
 	private int x;
 	private int y;
-	private String way;
 	
-	public snakePart(int x, int y, String way){
+	public SnakePart(int x, int y){
 		this.x = x;
 		this.y = y;
-		this.way = way;
 	}
 	
 	public int getX(){
@@ -19,16 +17,8 @@ public class snakePart {
 		return y;
 	}
 	
-	public String getWay(){
-		return way;
-	}
-	
 	public void setXY(int x,int y){
 		this.x = x;
 		this.y = y;
-	}
-	
-	public void setWay(String way){
-		this.way = way;
 	}
 }
