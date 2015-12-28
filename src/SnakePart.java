@@ -1,4 +1,4 @@
-package View;
+
 
 public class SnakePart {
 	private int x;
