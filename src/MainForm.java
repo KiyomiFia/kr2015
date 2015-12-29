@@ -69,18 +69,25 @@ public class MainForm{
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (gamePanel.isVisible()){
-					if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+					if (e.getKeyCode() == KeyEvent.VK_RIGHT){
 						if (!(gamePanel.getState() == Constants.State.LEFT))
 							gamePanel.setState(Constants.State.RIGHT);
-					if (e.getKeyCode() == KeyEvent.VK_LEFT) 
+					}
+					else
+					if (e.getKeyCode() == KeyEvent.VK_LEFT){ 
 						if (!(gamePanel.getState() == Constants.State.RIGHT))
 							gamePanel.setState(Constants.State.LEFT);
-					if (e.getKeyCode() == KeyEvent.VK_UP) 
+					}
+					else
+					if (e.getKeyCode() == KeyEvent.VK_UP){ 
 						if (!(gamePanel.getState() == Constants.State.DOWN))
 							gamePanel.setState(Constants.State.UP);
-					if (e.getKeyCode() == KeyEvent.VK_DOWN) 
+					}
+					else
+					if (e.getKeyCode() == KeyEvent.VK_DOWN){ 
 						if (!(gamePanel.getState() == Constants.State.UP))
 							gamePanel.setState(Constants.State.DOWN);
+					}
 				}
 				
 				if (multiPanel.isVisible()){

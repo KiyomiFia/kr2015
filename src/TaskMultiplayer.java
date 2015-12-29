@@ -3,11 +3,12 @@ public class TaskMultiplayer implements Runnable{
 	private MultiplayerPanel multiPanel;
 	private Thread t;
 	private volatile long timeBetweenSteps;
-	private volatile boolean pause;
+	private volatile boolean isPause;
 	
 	public TaskMultiplayer(MultiplayerPanel multiPanel, long timeBetweenSteps){
 		this.multiPanel = multiPanel;
 		this.timeBetweenSteps = timeBetweenSteps;
+		isPause = true;
 		t = new Thread(this);
 		t.start();
 	}
@@ -15,17 +16,22 @@ public class TaskMultiplayer implements Runnable{
 	@Override
 	public void run() {
 		while(true){
-			if (pause)
-			multiPanel.step();
-			try {
-				t.sleep(timeBetweenSteps);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (!isPause){
+				multiPanel.step();
+				try {
+					t.sleep(timeBetweenSteps);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}	
 			}
-			}
+		}
 	}
 	
 	public void setTimeBetweenSteps(long time){
 		timeBetweenSteps = time;
+	}
+	
+	public void setIsPause(boolean isPause){
+		this.isPause = isPause;
 	}
 }

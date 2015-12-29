@@ -24,7 +24,7 @@ public class TaskGame implements Runnable{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-		}
+			}
 		}
 	}
 	

@@ -85,7 +85,7 @@ public class MultiplayerPanel extends JPanel {
 		fieldPanel.setLayout(null);
 		
 		createField();
-		//timer = new TaskMultiplayer(this,500);
+		timer = new TaskMultiplayer(this,500);
 		React();
 	}
 
@@ -303,8 +303,12 @@ public class MultiplayerPanel extends JPanel {
 		timer.setTimeBetweenSteps(time);
 	}
 	
+	public void go(){
+		timer.setIsPause(false);
+	}
+	
 	public void stop(){
-		timer.setTimeBetweenSteps(0);
+		timer.setIsPause(true);
 	}
 	
 	public Constants.State getMyState(){

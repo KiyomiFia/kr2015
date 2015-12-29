@@ -33,7 +33,7 @@ public class HelloPanel extends JPanel {
 		add(gameButton);
 		
 		JLabel back = new JLabel("");
-		back.setIcon(new ImageIcon("C:\\Users\\Sonya\\Snake\\pics\\menu.png"));
+		back.setIcon(new ImageIcon("pics\\menu.png"));
 		back.setBounds(0, 0, 756, 480);
 		add(back);
 		
