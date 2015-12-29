@@ -92,17 +92,29 @@ public class MainForm{
 				
 				if (multiPanel.isVisible()){
 					if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-						if (!(multiPanel.getMyState() == Constants.State.LEFT))
-							multiPanel.setMyState(Constants.State.RIGHT);
+						if (!(multiPanel.getGreenState() == Constants.State.LEFT))
+							multiPanel.setGreenState(Constants.State.RIGHT);
 					if (e.getKeyCode() == KeyEvent.VK_LEFT) 
-						if (!(multiPanel.getMyState() == Constants.State.RIGHT))
-							multiPanel.setMyState(Constants.State.LEFT);
+						if (!(multiPanel.getGreenState() == Constants.State.RIGHT))
+							multiPanel.setGreenState(Constants.State.LEFT);
 					if (e.getKeyCode() == KeyEvent.VK_UP) 
-						if (!(multiPanel.getMyState() == Constants.State.DOWN))
-							multiPanel.setMyState(Constants.State.UP);
+						if (!(multiPanel.getGreenState() == Constants.State.DOWN))
+							multiPanel.setGreenState(Constants.State.UP);
 					if (e.getKeyCode() == KeyEvent.VK_DOWN) 
-						if (!(multiPanel.getMyState() == Constants.State.UP))
-							multiPanel.setMyState(Constants.State.DOWN);
+						if (!(multiPanel.getGreenState() == Constants.State.UP))
+							multiPanel.setGreenState(Constants.State.DOWN);
+					if (e.getKeyCode() == KeyEvent.VK_D)
+						if (!(multiPanel.getVioletState() == Constants.State.LEFT))
+							multiPanel.setVioletState(Constants.State.RIGHT);
+					if (e.getKeyCode() == KeyEvent.VK_A) 
+						if (!(multiPanel.getVioletState() == Constants.State.RIGHT))
+							multiPanel.setVioletState(Constants.State.LEFT);
+					if (e.getKeyCode() == KeyEvent.VK_W) 
+						if (!(multiPanel.getVioletState() == Constants.State.DOWN))
+							multiPanel.setVioletState(Constants.State.UP);
+					if (e.getKeyCode() == KeyEvent.VK_S) 
+						if (!(multiPanel.getVioletState() == Constants.State.UP))
+							multiPanel.setVioletState(Constants.State.DOWN);
 				}
 			}
 

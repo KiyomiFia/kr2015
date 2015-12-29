@@ -28,6 +28,7 @@ public class Switcher implements Observer{
 	
 	public void openMultiplayer(){
 		helloPanel.setVisible(false);
+		multiPanel.go();
 		multiPanel.redrawAll();
 		multiPanel.setVisible(true);
 	}

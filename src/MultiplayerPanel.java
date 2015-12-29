@@ -5,15 +5,12 @@ import javax.swing.*;
 
 public class MultiplayerPanel extends JPanel {
 	
-	private JTextField textField;
-	private JLabel openButton;
 	private JLabel scoreText;
-	private JLabel connectButton;
 	private JLabel backButton;
 	private JPanel fieldPanel;
 	private Field[][] field = new Field[Constants.FieldMaxX][Constants.FieldMaxY];
-	private Snake mySnake = new Snake(true);
-	private Snake socketSnake = new Snake(false);
+	private Snake greenSnake = new Snake(true);
+	private Snake violetSnake = new Snake(false);
 	private Bonus apple1 = new Bonus();
 	private Bonus apple2 = new Bonus();
 	private Bonus poison = new Bonus();
@@ -30,55 +27,17 @@ public class MultiplayerPanel extends JPanel {
 		add(StateInfoPanel, BorderLayout.NORTH);
 		StateInfoPanel.setLayout(new BorderLayout(0, 0));
 		
-		openButton = new JLabel("Open for connection");
-		openButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		openButton.setHorizontalAlignment(SwingConstants.CENTER);
-		openButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		openButton.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-		StateInfoPanel.add(openButton, BorderLayout.WEST);
-		
-		scoreText = new JLabel("You   2:2  Friend");
+		scoreText = new JLabel("Green  2:2  Violet");
 		scoreText.setHorizontalTextPosition(SwingConstants.CENTER);
 		scoreText.setHorizontalAlignment(SwingConstants.CENTER);
-		scoreText.setFont(new Font("Comic Sans MS", Font.PLAIN, 26));
+		scoreText.setFont(new Font("Comic Sans MS", Font.PLAIN, 36));
 		StateInfoPanel.add(scoreText, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		StateInfoPanel.add(panel, BorderLayout.EAST);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 0;
-		gbc_textField.gridy = 0;
-		panel.add(textField, gbc_textField);
-		textField.setColumns(10);
-		
-		connectButton = new JLabel("Connect   ");
-		connectButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		connectButton.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-		GridBagConstraints gbc_connectButton = new GridBagConstraints();
-		gbc_connectButton.insets = new Insets(0, 0, 5, 0);
-		gbc_connectButton.gridx = 1;
-		gbc_connectButton.gridy = 0;
-		panel.add(connectButton, gbc_connectButton);
-		
 		backButton = new JLabel("Back   ");
+		backButton.setHorizontalAlignment(SwingConstants.CENTER);
+		StateInfoPanel.add(backButton, BorderLayout.EAST);
 		backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		backButton.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-		GridBagConstraints gbc_backButton = new GridBagConstraints();
-		gbc_backButton.gridx = 1;
-		gbc_backButton.gridy = 1;
-		panel.add(backButton, gbc_backButton);
+		backButton.setFont(new Font("Comic Sans MS", Font.PLAIN, 36));
 		
 		fieldPanel = new JPanel();
 		add(fieldPanel, BorderLayout.CENTER);
@@ -144,14 +103,17 @@ public class MultiplayerPanel extends JPanel {
 		drawSnake(snake);
 		createApple(apple);
 		createPoison();
-		if (snake.getSnakeLength() == Constants.FieldMaxX*Constants.FieldMaxY/4) Win();
+		if (snake.getSnakeLength() == Constants.FieldMaxX*Constants.FieldMaxY/4) {
+			if (snake.isStandart()) Win("Green");
+			else Win("Violet");
+			}
 	}
 	
-	public void Win(){
+	public void Win(String name){
 		if (this.isVisible()){
 			ImageIcon icon = new ImageIcon("pics\\win.png");
 			JOptionPane.showMessageDialog(this,
-			    	"Congratulations. Let's start again.",
+			    	"Congratulations. "+name+" win. Let's start again.",
 			    	"You win",
 			    	JOptionPane.INFORMATION_MESSAGE,
 			    	icon);
@@ -159,72 +121,60 @@ public class MultiplayerPanel extends JPanel {
 			redrawAll();
 	}
 	
-	public void GameOver(){
-		if (this.isVisible()){
-			ImageIcon icon = new ImageIcon("pics\\gameover.png");
-			JOptionPane.showMessageDialog(this,
-			    	"You lose. Try again.",
-			    	"",
-			    	JOptionPane.INFORMATION_MESSAGE,
-			    	icon);
-		}
-			redrawAll();
-	}
-	
-	public boolean isMyHitInBody(){
+	public boolean isGreenHitInBody(){
 		boolean ans = false;
-		int x = mySnake.getSnakeBodyX(0);
-		int y = mySnake.getSnakeBodyY(0);
+		int x = greenSnake.getSnakeBodyX(0);
+		int y = greenSnake.getSnakeBodyY(0);
 		
-		if (mySnake.getState() == Constants.State.UP) y--;
-		if (mySnake.getState() == Constants.State.DOWN) y++;
-		if (mySnake.getState() == Constants.State.RIGHT) x++;
-		if (mySnake.getState() == Constants.State.LEFT) x--;
+		if (greenSnake.getState() == Constants.State.UP) y--;
+		if (greenSnake.getState() == Constants.State.DOWN) y++;
+		if (greenSnake.getState() == Constants.State.RIGHT) x++;
+		if (greenSnake.getState() == Constants.State.LEFT) x--;
 		
 		if (x == -1) x = Constants.FieldMaxX-1;
 		if (y == -1) y = Constants.FieldMaxY-1;
 		if (x == Constants.FieldMaxX) x = 0;
 		if (y == Constants.FieldMaxY) y = 0; 
 		
-		for (int i=1;i<mySnake.getSnakeLength();i++){
-			if ((x == mySnake.getSnakeBodyX(i)) &&
-				(y == mySnake.getSnakeBodyY(i)))
+		for (int i=1;i<greenSnake.getSnakeLength();i++){
+			if ((x == greenSnake.getSnakeBodyX(i)) &&
+				(y == greenSnake.getSnakeBodyY(i)))
 					ans = true; 
 		}
 		
-		for (int i=0;i<socketSnake.getSnakeLength();i++){
-			if ((x == socketSnake.getSnakeBodyX(i)) &&
-				(y == socketSnake.getSnakeBodyY(i)))
+		for (int i=0;i<violetSnake.getSnakeLength();i++){
+			if ((x == violetSnake.getSnakeBodyX(i)) &&
+				(y == violetSnake.getSnakeBodyY(i)))
 					ans = true; 
 		}
 		
 		return ans;
 	}
 	
-	public boolean isSocketHitInBody(){
+	public boolean isVioletHitInBody(){
 		boolean ans = false;
-		int x = socketSnake.getSnakeBodyX(0);
-		int y = socketSnake.getSnakeBodyY(0);
+		int x = violetSnake.getSnakeBodyX(0);
+		int y = violetSnake.getSnakeBodyY(0);
 		
-		if (socketSnake.getState() == Constants.State.UP) y--;
-		if (socketSnake.getState() == Constants.State.DOWN) y++;
-		if (socketSnake.getState() == Constants.State.RIGHT) x++;
-		if (socketSnake.getState() == Constants.State.LEFT) x--;
+		if (violetSnake.getState() == Constants.State.UP) y--;
+		if (violetSnake.getState() == Constants.State.DOWN) y++;
+		if (violetSnake.getState() == Constants.State.RIGHT) x++;
+		if (violetSnake.getState() == Constants.State.LEFT) x--;
 		
 		if (x == -1) x = Constants.FieldMaxX-1;
 		if (y == -1) y = Constants.FieldMaxY-1;
 		if (x == Constants.FieldMaxX) x = 0;
 		if (y == Constants.FieldMaxY) y = 0; 
 		
-		for (int i=0;i<mySnake.getSnakeLength();i++){
-			if ((x == mySnake.getSnakeBodyX(i)) &&
-				(y == mySnake.getSnakeBodyY(i)))
+		for (int i=0;i<greenSnake.getSnakeLength();i++){
+			if ((x == greenSnake.getSnakeBodyX(i)) &&
+				(y == greenSnake.getSnakeBodyY(i)))
 					ans = true; 
 		}
 		
-		for (int i=1;i<socketSnake.getSnakeLength();i++){
-			if ((x == socketSnake.getSnakeBodyX(i)) &&
-				(y == socketSnake.getSnakeBodyY(i)))
+		for (int i=1;i<violetSnake.getSnakeLength();i++){
+			if ((x == violetSnake.getSnakeBodyX(i)) &&
+				(y == violetSnake.getSnakeBodyY(i)))
 					ans = true; 
 		}
 		
@@ -242,61 +192,61 @@ public class MultiplayerPanel extends JPanel {
 	}
 	
 	public void redrawAll(){
-		mySnake = new Snake(true);
-		socketSnake = new Snake(false);
-		scoreText.setText("You   "+mySnake.getSnakeLength()+":"+socketSnake.getSnakeLength()+"  Friend");
+		greenSnake = new Snake(true);
+		violetSnake = new Snake(false);
+		scoreText.setText("Green  "+greenSnake.getSnakeLength()+":"+violetSnake.getSnakeLength()+"  Violet");
 		redrawField();
-		drawSnake(mySnake);
-		drawSnake(socketSnake);
+		drawSnake(greenSnake);
+		drawSnake(violetSnake);
 		createApple(apple1);
 		createApple(apple2);
 		createPoison();
 		setTimer(500);
 	}
 	
-	public void makeMyMove(){
-		if (isMyHitInBody()){
-			GameOver();
+	public void makeGreenMove(){
+		if (isGreenHitInBody()){
+			Win("Violet");
 			redrawAll();
 		}
-		else mySnake.makeMove();
+		else greenSnake.makeMove();
 		redrawField();
-		drawSnake(mySnake);
-		drawSnake(socketSnake);
-		if ((mySnake.getSnakeBodyX(0) == apple1.getX()) && (mySnake.getSnakeBodyY(0) == apple1.getY())) {
-			Eat(mySnake,apple1);
-			scoreText.setText("You   "+mySnake.getSnakeLength()+":"+socketSnake.getSnakeLength()+"  Friend");
+		drawSnake(greenSnake);
+		drawSnake(violetSnake);
+		if ((greenSnake.getSnakeBodyX(0) == apple1.getX()) && (greenSnake.getSnakeBodyY(0) == apple1.getY())) {
+			Eat(greenSnake,apple1);
+			scoreText.setText("Green  "+greenSnake.getSnakeLength()+":"+violetSnake.getSnakeLength()+"  Violet");
 		}
-		if ((mySnake.getSnakeBodyX(0) == apple2.getX()) && (mySnake.getSnakeBodyY(0) == apple2.getY())) {
-			Eat(mySnake,apple2);
-			scoreText.setText("You   "+mySnake.getSnakeLength()+":"+socketSnake.getSnakeLength()+"  Friend");
+		if ((greenSnake.getSnakeBodyX(0) == apple2.getX()) && (greenSnake.getSnakeBodyY(0) == apple2.getY())) {
+			Eat(greenSnake,apple2);
+			scoreText.setText("Green  "+greenSnake.getSnakeLength()+":"+violetSnake.getSnakeLength()+"  Violet");
 		}
-		if ((mySnake.getSnakeBodyX(0) == poison.getX()) && (mySnake.getSnakeBodyY(0) == poison.getY())) GameOver();
+		if ((greenSnake.getSnakeBodyX(0) == poison.getX()) && (greenSnake.getSnakeBodyY(0) == poison.getY())) Win("Violet");
 	}
 	
-	public void makeSocketMove(){
-		if (isSocketHitInBody()){
-			Win();
+	public void makeVioletMove(){
+		if (isVioletHitInBody()){
+			Win("Green");
 			redrawAll();
 		}
-		else socketSnake.makeMove();
+		else violetSnake.makeMove();
 		redrawField();
-		drawSnake(mySnake);
-		drawSnake(socketSnake);
-		if ((socketSnake.getSnakeBodyX(0) == apple1.getX()) && (socketSnake.getSnakeBodyY(0) == apple1.getY())) {
-			Eat(socketSnake,apple1);
-			scoreText.setText("You   "+mySnake.getSnakeLength()+":"+socketSnake.getSnakeLength()+"  Friend");
+		drawSnake(greenSnake);
+		drawSnake(violetSnake);
+		if ((violetSnake.getSnakeBodyX(0) == apple1.getX()) && (violetSnake.getSnakeBodyY(0) == apple1.getY())) {
+			Eat(violetSnake,apple1);
+			scoreText.setText("Green  "+greenSnake.getSnakeLength()+":"+violetSnake.getSnakeLength()+"  Violet");
 		}
-		if ((socketSnake.getSnakeBodyX(0) == apple2.getX()) && (socketSnake.getSnakeBodyY(0) == apple2.getY())) {
-			Eat(socketSnake,apple2);
-			scoreText.setText("You   "+mySnake.getSnakeLength()+":"+socketSnake.getSnakeLength()+"  Friend");
+		if ((violetSnake.getSnakeBodyX(0) == apple2.getX()) && (violetSnake.getSnakeBodyY(0) == apple2.getY())) {
+			Eat(violetSnake,apple2);
+			scoreText.setText("Green  "+greenSnake.getSnakeLength()+":"+violetSnake.getSnakeLength()+"  Violet");
 		}
-		if ((socketSnake.getSnakeBodyX(0) == poison.getX()) && (socketSnake.getSnakeBodyY(0) == poison.getY())) Win();
+		if ((violetSnake.getSnakeBodyX(0) == poison.getX()) && (violetSnake.getSnakeBodyY(0) == poison.getY())) Win("Green");
 	}
 	
 	public void step(){
-		makeMyMove();
-		makeSocketMove();
+		makeGreenMove();
+		makeVioletMove();
 	}
 	
 	public void setTimer(long time){
@@ -311,20 +261,20 @@ public class MultiplayerPanel extends JPanel {
 		timer.setIsPause(true);
 	}
 	
-	public Constants.State getMyState(){
-		return mySnake.getState();
+	public Constants.State getGreenState(){
+		return greenSnake.getState();
 	}
 	
-	public void setMyState(Constants.State state){
-		mySnake.setState(state);
+	public void setGreenState(Constants.State state){
+		greenSnake.setState(state);
 	}
 	
-	public Constants.State getSocketState(){
-		return socketSnake.getState();
+	public Constants.State getVioletState(){
+		return violetSnake.getState();
 	}
 	
-	public void setSocketState(Constants.State state){
-		socketSnake.setState(state);
+	public void setVioletState(Constants.State state){
+		violetSnake.setState(state);
 	}
 	
 	public void setApple1(int x,int y){
@@ -379,37 +329,6 @@ public class MultiplayerPanel extends JPanel {
 		
 		
 	}
-	
-	public void successConnectionNotification(String connectIP){
-        JOptionPane.showMessageDialog(this, "User " + connectIP + " accept your game");
-    }
-	
-	public void notEnoughParametersNotification(){
-        JOptionPane.showMessageDialog(this, "Not enough actual parameters");
-    }
-
-    public void remoteUserIsBusyNotification(String remoteIP){
-        JOptionPane.showMessageDialog(this, "User " + remoteIP + " is busy");
-    }
-
-    public void remoteUserIsRejectedYourCallNotification(String remoteIP){
-        JOptionPane.showMessageDialog(this, "User " + remoteIP + " has declined your call.");
-    }
-
-    public void remoteUserIsNotAccessibleNotification(){
-        JOptionPane.showMessageDialog(this, "User is not accessible");
-    }
-
-    public boolean acceptOrRejectMessage(String remoteIP){
-        Object[] options = {"Receive","Reject"};
-
-        int dialogResult = JOptionPane.showOptionDialog(this, "User with ip " + remoteIP +
-                        " is trying to connect with you", "Receive connection",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null, options, options[0]);
-        return dialogResult == JOptionPane.YES_OPTION;
-    }
 	
 	private Observable myObservable = new Observable(){
         public void notifyObservers(Object arg) {
